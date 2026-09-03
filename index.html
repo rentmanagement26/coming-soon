@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DomusPRO — Coming Soon</title>
+<meta name="description" content="DomusPRO brings your properties, leases, and rent into one place. Join the waitlist to hear when we launch.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* dark-first: bare :root carries the default (dark) palette */
+    --bg: #0e211d;
+    --bg-deep: #081512;
+    --surface: #16302b;
+    --surface-line: rgba(238, 242, 239, 0.09);
+    --text: #eef2ee;
+    --text-muted: #9db4ac;
+    --text-faint: #6d8a81;
+    --red: #ff3f3f;
+    --red-dim: #b52a2a;
+    --orange: #e07a3f;
+    --teal: #4fae95;
+    --focus: #ffb199;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #f6f3ec;
+      --bg-deep: #efe9dc;
+      --surface: #ffffff;
+      --surface-line: rgba(22, 48, 43, 0.1);
+      --text: #16302b;
+      --text-muted: #55655f;
+      --text-faint: #8a988f;
+      --red: #e42b2b;
+      --red-dim: #c62222;
+      --orange: #c15f22;
+      --teal: #2f8a75;
+      --focus: #a8321f;
+    }
+  }
+
+  :root[data-theme="light"] {
+    --bg: #f6f3ec;
+    --bg-deep: #efe9dc;
+    --surface: #ffffff;
+    --surface-line: rgba(22, 48, 43, 0.1);
+    --text: #16302b;
+    --text-muted: #55655f;
+    --text-faint: #8a988f;
+    --red: #e42b2b;
+    --red-dim: #c62222;
+    --orange: #c15f22;
+    --teal: #2f8a75;
+    --focus: #a8321f;
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0e211d;
+    --bg-deep: #081512;
+    --surface: #16302b;
+    --surface-line: rgba(238, 242, 239, 0.09);
+    --text: #eef2ee;
+    --text-muted: #9db4ac;
+    --text-faint: #6d8a81;
+    --red: #ff3f3f;
+    --red-dim: #b52a2a;
+    --orange: #e07a3f;
+    --teal: #4fae95;
+    --focus: #ffb199;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  .page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    isolation: isolate;
+  }
+
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(var(--surface-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--surface-line) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: linear-gradient(to bottom, black, transparent 78%);
+            mask-image: linear-gradient(to bottom, black, transparent 78%);
+    opacity: .55;
+  }
+
+  header {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: clamp(20px, 4vw, 40px) clamp(20px, 6vw, 64px) 0;
+  }
+
+  .logo-lockup {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon {
+    height: clamp(34px, 4.6vw, 50px);
+    width: auto;
+    display: block;
+  }
+
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  .logo-wordmark {
+    font-family: "Public Sans", sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.15rem, 2.3vw, 1.55rem);
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  .logo-wordmark .accent { color: var(--red); }
+
+  .logo-tagline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 7px;
+    letter-spacing: .02em;
+    white-space: nowrap;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-top: 2px;
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border: 1px solid var(--surface-line);
+    border-radius: 999px;
+    padding: 7px 14px 7px 11px;
+  }
+
+  .status-pill .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--red);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--red) 22%, transparent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .status-pill .dot { animation: pulse 2.4s ease-in-out infinite; }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .45; }
+  }
+
+  main {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: clamp(48px, 9vh, 96px) clamp(20px, 6vw, 64px) clamp(40px, 8vh, 80px);
+  }
+
+  .hero {
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin: 0 0 22px;
+  }
+
+  h1 {
+    font-family: "Fraunces", ui-serif, Georgia, serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: clamp(2.6rem, 6.4vw, 4.6rem);
+    line-height: 1.03;
+    letter-spacing: -0.01em;
+    margin: 0 0 22px;
+    text-wrap: balance;
+  }
+
+  h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--red);
+  }
+
+  .sub {
+    font-size: clamp(1.02rem, 1.7vw, 1.2rem);
+    line-height: 1.6;
+    color: var(--text-muted);
+    max-width: 46ch;
+    margin: 0 0 40px;
+    text-wrap: pretty;
+  }
+
+  .notify-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+
+  .notify-row .email-input {
+    font-family: "Public Sans", sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--surface-line);
+    border-radius: 10px;
+    padding: 14px 16px;
+    min-width: 240px;
+    outline: none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+
+  .notify-row .email-input::placeholder { color: var(--text-faint); }
+
+  .notify-row .email-input:focus-visible {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--red) 18%, transparent);
+  }
+
+  .notify-row .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--red);
+    color: #fff8f6;
+    font-family: "Public Sans", sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 1;
+    text-decoration: none;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 10px 28px -12px color-mix(in srgb, var(--red) 65%, transparent);
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease, opacity .15s ease;
+  }
+
+  .notify-row .button:hover:not(:disabled) {
+    background: var(--red-dim);
+    transform: translateY(-1px);
+    box-shadow: 0 14px 30px -12px color-mix(in srgb, var(--red) 70%, transparent);
+  }
+
+  .notify-row .button:disabled {
+    opacity: .6;
+    cursor: default;
+    transform: none;
+  }
+
+  .notify-row .button:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  .notify-row .button svg { width: 16px; height: 16px; flex: none; }
+
+  .hp-field {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .cf-turnstile { margin: 0 0 16px; }
+
+  .hint {
+    font-size: 13px;
+    color: var(--text-faint);
+    min-height: 1em;
+  }
+
+  .hint.is-error { color: var(--red); }
+  .hint.is-success { color: var(--teal); }
+
+  .pillars {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--surface-line);
+    border-top: 1px solid var(--surface-line);
+    border-bottom: 1px solid var(--surface-line);
+  }
+
+  .pillar {
+    background: var(--bg);
+    padding: clamp(22px, 3.6vw, 32px) clamp(18px, 4vw, 40px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pillar .mark {
+    width: 30px;
+    height: 30px;
+    color: var(--red);
+  }
+
+  .pillar h3 {
+    margin: 6px 0 0;
+    font-family: "Fraunces", serif;
+    font-weight: 500;
+    font-size: 1.08rem;
+  }
+
+  .pillar p {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--text-muted);
+  }
+
+  footer {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 22px clamp(20px, 6vw, 64px) 26px;
+    font-size: 12.5px;
+    color: var(--text-faint);
+  }
+
+  footer a {
+    color: var(--text-muted);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+
+  footer a:hover { border-color: currentColor; }
+
+  .skyline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: clamp(120px, 22vh, 240px);
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: clamp(6px, 1.1vw, 14px);
+    padding: 0 6vw;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to top, black, transparent);
+            mask-image: linear-gradient(to top, black, transparent);
+  }
+
+  .skyline i {
+    display: block;
+    width: clamp(5px, .8vw, 11px);
+    background: linear-gradient(to top, color-mix(in srgb, var(--red) 55%, transparent), transparent);
+    border-radius: 2px 2px 0 0;
+    opacity: .5;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .skyline i { animation: breathe 7s ease-in-out infinite; }
+  }
+
+  @keyframes breathe {
+    0%, 100% { opacity: .38; }
+    50% { opacity: .62; }
+  }
+
+  @media (max-width: 720px) {
+    .pillars { grid-template-columns: 1fr; }
+    .pillar { border-bottom: 1px solid var(--surface-line); }
+    .pillar:last-child { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="grid-overlay"></div>
+  <div class="skyline" aria-hidden="true" id="skyline"></div>
+
+  <header>
+    <span class="logo-lockup">
+      <img class="logo-icon" src="/domouspro-icon.png" alt="" aria-hidden="true" width="118" height="170">
+      <span class="logo-text">
+        <span class="logo-wordmark">Domous<span class="accent">PRO</span></span>
+        <span class="logo-tagline">Property Management Solution</span>
+      </span>
+    </span>
+    <span class="status-pill"><span class="dot"></span>Launching soon</span>
+  </header>
+
+  <main>
+    <div class="hero">
+      <p class="eyebrow">Coming soon</p>
+      <h1>Property management,<br><em>without the spreadsheets.</em></h1>
+      <p class="sub">DomusPRO brings your properties, leases, and rent in one place — built for landlords and property managers who'd rather run their portfolio than chase paperwork.</p>
+
+      <form id="notifyForm" novalidate>
+        <div class="hp-field" aria-hidden="true">
+          <label for="companySite">Leave this field empty</label>
+          <input type="text" id="companySite" name="companySite" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="notify-row">
+          <input class="email-input" type="email" id="notifyEmail" name="email" placeholder="you@email.com" aria-label="Your email address" autocomplete="email" required>
+          <button class="button" type="submit" id="notifySubmit">
+            <span id="notifySubmitLabel">Join the waitlist</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+
+        <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-theme="auto"></div>
+
+        <p class="hint" id="notifyHint">No spam — just one email when we open the doors.</p>
+      </form>
+    </div>
+  </main>
+
+  <section class="pillars">
+    <div class="pillar">
+      <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-7h6v7"/><path d="M4 21h16"/></svg>
+      <h3>Properties &amp; units</h3>
+      <p>Every building, unit, and vacancy tracked in one portfolio view.</p>
+    </div>
+    <div class="pillar">
+      <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+      <h3>Rent, on time</h3>
+      <p>Collection, reminders, and a ledger that reconciles itself.</p>
+    </div>
+    <div class="pillar">
+      <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5h5"/><path d="M6 3h8l5 5v13H6z"/><path d="M9 13h6M9 17h6"/></svg>
+      <h3>Leases &amp; compliance</h3>
+      <p>Built with provincial tenancy rules in mind, from day one.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>&copy; 2026 DomusPRO. All rights reserved.</span>
+    <a id="footerEmail" href="#" data-u="rentmanagement26" data-d="gmail.com">Email us</a>
+  </footer>
+</div>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+  (function () {
+    var rail = document.getElementById('skyline');
+    var count = 34;
+    var heights = [38, 62, 46, 90, 54, 70, 40, 100, 58, 48, 76, 34, 88, 52, 64, 42, 96, 56, 40, 72, 50, 84, 36, 66, 46, 92, 60, 44, 78, 38, 68, 54, 30, 62];
+    for (var i = 0; i < count; i++) {
+      var bar = document.createElement('i');
+      var h = heights[i % heights.length];
+      bar.style.height = h + '%';
+      bar.style.animationDelay = (i * 0.18) + 's';
+      rail.appendChild(bar);
+    }
+
+    var footerEmail = document.getElementById('footerEmail');
+    var addr = footerEmail.dataset.u + '@' + footerEmail.dataset.d;
+    footerEmail.href = 'mailto:' + addr;
+    footerEmail.textContent = addr;
+
+    var form = document.getElementById('notifyForm');
+    var hint = document.getElementById('notifyHint');
+    var submitBtn = document.getElementById('notifySubmit');
+    var submitLabel = document.getElementById('notifySubmitLabel');
+    var emailInput = document.getElementById('notifyEmail');
+    var honeypot = document.getElementById('companySite');
+    var loadedAt = Date.now();
+    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    function setHint(text, kind) {
+      hint.textContent = text;
+      hint.className = 'hint' + (kind ? ' is-' + kind : '');
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Bots that auto-fill every field trip the honeypot.
+      if (honeypot.value !== '') { return; }
+      // Bots that submit instantly trip the minimum-dwell check.
+      if (Date.now() - loadedAt < 1500) { return; }
+
+      var email = emailInput.value.trim();
+      if (!emailPattern.test(email)) {
+        setHint('Enter a valid email address.', 'error');
+        emailInput.focus();
+        return;
+      }
+
+      var tokenField = form.querySelector('[name="cf-turnstile-response"]');
+      var token = tokenField ? tokenField.value : '';
+      if (!token) {
+        setHint('Please complete the verification above.', 'error');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitLabel.textContent = 'Sending…';
+      setHint('', '');
+
+      fetch('/api/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, token: token, company: honeypot.value }),
+      })
+        .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+        .then(function (result) {
+          if (result.ok && result.data.ok) {
+            setHint('You\'re on the list — we\'ll email you when we launch.', 'success');
+            form.reset();
+            emailInput.disabled = true;
+            submitBtn.disabled = true;
+            submitLabel.textContent = 'You\'re in';
+          } else {
+            setHint((result.data && result.data.error) || 'Something went wrong. Please try again.', 'error');
+            submitBtn.disabled = false;
+            submitLabel.textContent = 'Join the waitlist';
+            if (window.turnstile) { window.turnstile.reset(); }
+          }
+        })
+        .catch(function () {
+          setHint('Network error — please try again.', 'error');
+          submitBtn.disabled = false;
+          submitLabel.textContent = 'Join the waitlist';
+          if (window.turnstile) { window.turnstile.reset(); }
+        });
+    });
+  })();
+</script>
+</body>
+</html>
