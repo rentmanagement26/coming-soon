@@ -378,13 +378,6 @@
     color: var(--text-faint);
   }
 
-  footer a {
-    color: var(--text-muted);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-  }
-
-  footer a:hover { border-color: currentColor; }
 
   .skyline {
     position: absolute;
@@ -491,7 +484,6 @@
 
   <footer>
     <span>&copy; 2026 DomusPRO. All rights reserved.</span>
-    <a id="footerEmail" href="#" data-u="rentmanagement26" data-d="gmail.com">Email us</a>
   </footer>
 </div>
 
@@ -509,10 +501,6 @@
       rail.appendChild(bar);
     }
 
-    var footerEmail = document.getElementById('footerEmail');
-    var addr = footerEmail.dataset.u + '@' + footerEmail.dataset.d;
-    footerEmail.href = 'mailto:' + addr;
-    footerEmail.textContent = addr;
 
     var form = document.getElementById('notifyForm');
     var hint = document.getElementById('notifyHint');
