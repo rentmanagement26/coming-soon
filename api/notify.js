@@ -1,3 +1,5 @@
+import nodemailer from 'nodemailer';
+
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default async function handler(req, res) {
@@ -59,37 +61,32 @@ export default async function handler(req, res) {
     return res.status(400).json({ ok: false, error: 'Verification failed. Please try again.' });
   }
 
-  const resendKey = process.env.RESEND_API_KEY;
-  const notifyTo = process.env.NOTIFY_TO_EMAIL || 'rentmanagement26@gmail.com';
-  const notifyFrom = process.env.NOTIFY_FROM_EMAIL || 'DomusPRO Waitlist <onboarding@resend.dev>';
+  const gmailUser = process.env.GMAIL_USER || 'rentmanagement26@gmail.com';
+  const gmailAppPassword = process.env.GMAIL_APP_PASSWORD;
+  const notifyTo = process.env.NOTIFY_TO_EMAIL || gmailUser;
 
-  if (!resendKey) {
-    console.warn('RESEND_API_KEY is not set — signup verified but no email was sent:', email);
+  if (!gmailAppPassword) {
+    console.warn('GMAIL_APP_PASSWORD is not set — signup verified but no email was sent:', email);
     return res.status(200).json({ ok: true });
   }
 
   try {
-    const emailRes = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${resendKey}`,
-        'Content-Type': 'application/json',
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: gmailUser,
+        pass: gmailAppPassword,
       },
-      body: JSON.stringify({
-        from: notifyFrom,
-        to: notifyTo,
-        subject: 'New DomusPRO waitlist signup',
-        text: `${email} just joined the DomusPRO waitlist.`,
-      }),
     });
 
-    if (!emailRes.ok) {
-      const detail = await emailRes.text();
-      console.error('Resend rejected the notification email', emailRes.status, detail);
-      return res.status(502).json({ ok: false, error: 'Could not send the notification email. Please try again shortly.' });
-    }
+    await transporter.sendMail({
+      from: `DomusPRO Waitlist <${gmailUser}>`,
+      to: notifyTo,
+      subject: 'New DomusPRO waitlist signup',
+      text: `${email} just joined the DomusPRO waitlist.`,
+    });
   } catch (err) {
-    console.error('Failed to reach Resend', err);
+    console.error('Failed to send notification email via Gmail', err);
     return res.status(502).json({ ok: false, error: 'Could not send the notification email. Please try again shortly.' });
   }
 
